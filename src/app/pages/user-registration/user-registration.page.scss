@@ -1,0 +1,141 @@
+/* Sidebar */
+.custom-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100%;
+  background: #3880ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 60px;
+  z-index: 999;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      cursor: pointer;
+      color: white;
+      font-size: 12px;
+      text-align: center;
+
+      ion-icon {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+
+      .label {
+        position: absolute;
+        left: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.75);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 5px;
+      }
+
+      &:hover .label {
+        opacity: 1;
+      }
+    }
+  }
+
+  .logout-section {
+    margin-bottom: 30px;
+  }
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  height: 100%;
+  margin-left: 60px; /* Adjust main content beside sidebar */
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #f4f4f4;
+  overflow: auto;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  select,
+  input {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  .datetime {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+
+  /* Status Color Coding */
+  .pending {
+    background-color: orange;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  .approved {
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  .rejected {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  tr.active {
+    border: 2px solid #00bfff;
+  }
+}

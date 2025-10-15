@@ -1,0 +1,79 @@
+<ion-content [fullscreen]="true" class="login-content">
+  <!-- Background overlay (optional) -->
+  <div class="background-overlay"></div>
+
+  <div class="login-wrapper">
+    <div class="login-container adjusted">
+      <!-- Logo section -->
+      <div class="logo-circle">
+        <img src="assets/logo.jpg" alt="Logo" />
+      </div>
+
+      <h1 class="logo-title">BARANGAY CONNECT</h1>
+      <div class="divider"></div>
+
+      <!-- FORM -->
+      <form (submit)="login()">
+        <!-- Phone input with prefix -->
+        <div class="phone-container">
+          <ion-item class="phone-box prefix-box" fill="outline" lines="none">
+            <ion-label class="prefix-label">(+63)</ion-label>
+          </ion-item>
+
+          <ion-item class="phone-box input-box" fill="outline" lines="none">
+            <ion-label position="floating">Phone Number</ion-label>
+            <ion-input
+              type="tel"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="10"
+              [(ngModel)]="phone"
+              name="phone"
+              (ionInput)="restrictPhoneInput($event)">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Password input -->
+        <ion-item class="custom-input center-input" fill="outline">
+          <ion-label position="floating">Password</ion-label>
+          <ion-input
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="password"
+            name="password"
+            required
+            (focus)="passwordFocused = true"
+            (blur)="passwordFocused = false"
+            class="center-text">
+          </ion-input>
+          <ion-icon
+            *ngIf="password || passwordFocused"
+            slot="end"
+            [name]="showPassword ? 'eye-off' : 'eye'"
+            (click)="togglePasswordVisibility()"
+            style="cursor: pointer; font-size: 22px;">
+          </ion-icon>
+        </ion-item>
+
+        <!-- Remember me / Forgot password -->
+        <div class="checkbox-forgot-row">
+          <ion-item lines="none" class="checkbox-row">
+            <ion-checkbox slot="start" [(ngModel)]="rememberMe" name="rememberMe" class="custom-checkbox"></ion-checkbox>
+            <ion-label class="checkbox-label">Remember Me</ion-label>
+          </ion-item>
+          <a class="forgot-password" (click)="goToForgotPassword()">Forgot Password?</a>
+        </div>
+
+        <!-- Login button -->
+        <ion-button expand="block" type="submit" class="ion-margin-top login-btn">
+          Login
+        </ion-button>
+
+        <!-- Create account -->
+        <div class="ion-text-center ion-margin-top">
+          <ion-text>New user? <a (click)="goToRegister()">Create Account</a></ion-text>
+        </div>
+      </form>
+    </div>
+  </div>
+</ion-content>

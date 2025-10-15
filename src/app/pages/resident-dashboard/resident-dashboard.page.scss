@@ -1,0 +1,116 @@
+/* === Menu Container === */
+ion-menu {
+  --width: 280px;
+}
+
+ion-menu::part(backdrop) {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.menu-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  margin: 20px 12px;
+  padding: 20px 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* === Profile Section === */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 0 20px;
+}
+
+.profile-pic img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.edit-icon {
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+/* === Menu Items === */
+ion-list {
+  padding: 0 12px;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --inner-padding-end: 10px;
+  border-radius: 12px;
+  margin: 5px 0;
+  font-size: 15px;
+  --min-height: 48px;
+  align-items: center;
+  --background-focused: #f0f0f0;
+  --background-hover: #f0f0f0;
+}
+
+/* === Icons inside ion-item === */
+ion-item ion-icon[slot="start"] {
+  font-size: 22px;
+  color: #222;
+  min-width: 24px;
+  margin-right: 8px;
+}
+
+/* === Labels inside ion-item === */
+ion-label {
+  font-size: 15px;
+  color: #333;
+}
+
+/* === Date / Notes === */
+.date-box {
+  padding: 10px 16px;
+  text-align: right;
+  font-weight: bold;
+}
+
+.note {
+  font-size: 13px;
+  margin: 15px;
+  color: red;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.note ion-icon {
+  color: red;
+  font-size: 16px;
+}
+
+.notif-btn {
+  position: relative;
+}
+
+.notif-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 0.7rem;
+  border-radius: 50%;
+  padding: 3px 6px;
+}

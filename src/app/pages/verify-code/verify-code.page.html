@@ -1,0 +1,23 @@
+<ion-content class="ion-padding">
+  <h2 class="title">Verify Account</h2>
+
+  <div class="code-input-container">
+    <ion-input
+      *ngFor="let c of code; let i = index"
+      type="text"
+      maxlength="1"
+      [(ngModel)]="code[i]"
+      class="code-box"
+      inputmode="numeric"
+    ></ion-input>
+  </div>
+
+  <ion-button expand="block" (click)="verify()">Verify</ion-button>
+
+  <div class="resend-container">
+    <span *ngIf="timer > 0">Resend code in {{ timer }} seconds</span>
+    <ion-button fill="clear" size="small" (click)="resendCode()" [disabled]="timer > 0">
+      Resend Code
+    </ion-button>
+  </div>
+</ion-content>

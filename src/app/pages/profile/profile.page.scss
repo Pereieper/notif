@@ -1,0 +1,46 @@
+ion-item {
+  --background: #f9f9f9;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  --border-radius: 10px;
+  --highlight-height: 0;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s;
+}
+
+ion-label {
+  font-weight: 500;
+  color: #444;
+  font-size: 14px;
+}
+
+ion-input {
+  font-size: 15px;
+  color: #000;
+  transition: color 0.3s, border 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+ion-input[readonly] {
+  color: #999;
+  border-bottom: 1px dashed #ccc;
+}
+
+ion-input.editable {
+  color: #007bff;
+  border-bottom: 1px solid #007bff;
+}
+
+.contact-highlight {
+  color: #28a745; // green text for updated contact
+  font-weight: bold;
+}
+
+.edit-mode {
+  background: #e8f4ff !important;
+}
+
+ion-button {
+  margin-top: 20px;
+}

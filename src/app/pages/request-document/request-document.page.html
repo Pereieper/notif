@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Request Document</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="request-document-content">
+  <div class="timestamp">
+    <p class="date-time">{{ dateNow }} | {{ timeNow }}</p>
+  </div>
+
+  <div class="form-section">
+    <h2>Request Document</h2>
+    <p class="instruction">Please fill out the form below to submit your request.</p>
+
+    <ion-item>
+      <ion-select [(ngModel)]="documentType" placeholder="--Please select document--">
+        <ion-select-option *ngFor="let doc of documentOptions" [value]="doc">{{ doc }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-label class="label-muted">Purpose*</ion-label>
+    <ion-item>
+      <ion-select [(ngModel)]="purpose" placeholder="--Please select purpose--">
+        <ion-select-option *ngFor="let item of purposeOptions" [value]="item">{{ item }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Show text input if "Others" is selected -->
+    <div *ngIf="purpose === 'Others'" class="custom-input">
+      <ion-label class="label-muted">Enter your purpose*</ion-label>
+      <ion-item>
+        <ion-input [(ngModel)]="customPurpose" placeholder="Type your purpose here..."></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Show number of copies and requirements if NOT "Others" -->
+    <div *ngIf="purpose !== 'Others' && purpose !== ''">
+      <ion-label class="label-muted">Number of Copies*</ion-label>
+       <ion-item>
+    <input
+      type="number"
+      min="1"
+      [(ngModel)]="numberOfCopies"
+      class="native-input custom-number-input"
+    />
+  </ion-item>
+      <ion-label class="label-muted">Requirements*</ion-label>
+      <div class="upload-box" (click)="openPhotoOptions()">
+        <img
+          [src]="uploadedPhoto || 'assets/img/photo-placeholder.png'"
+          alt="Upload"
+          class="upload-photo"
+        />
+        <p *ngIf="!uploadedPhoto">Tap to upload requirement (Camera/Gallery)</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-group">
+      <ion-button expand="block" fill="outline" color="medium" (click)="onCancel()">Cancel</ion-button>
+      <ion-button expand="block" (click)="onContinue()">Request</ion-button>
+    </div>
+  </div>
+</ion-content>

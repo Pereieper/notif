@@ -1,0 +1,210 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>User Requests</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-request-content">
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="custom-sidebar">
+      <ul>
+        <li (click)="navigateTo('secretary-dashboard')" [class.active]="false">
+          <ion-icon name="home-outline"></ion-icon>
+          <span class="label">Dashboard</span>
+        </li>
+        <li (click)="navigateTo('user-registration')">
+          <ion-icon name="person-add-outline"></ion-icon>
+          <span class="label">User Registration</span>
+        </li>
+        <li (click)="navigateTo('user-request')" class="active">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span class="label">User Requests</span>
+        </li>
+        <li (click)="navigateTo('template-page')">
+          <ion-icon name="document-outline"></ion-icon>
+          <span class="label">Template</span>
+        </li>
+      </ul>
+
+      <ul class="logout-section">
+        <li (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span class="label">Logout</span>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Filters and search -->
+      <div class="top-bar ion-padding">
+        <ion-select [(ngModel)]="selectedStatus" placeholder="Filter by status">
+  <ion-select-option value="All">All</ion-select-option>
+  <ion-select-option value="Pending">Pending</ion-select-option>
+  <ion-select-option value="Approved">Approved</ion-select-option>
+  <ion-select-option value="For Print">For Print</ion-select-option>
+  <ion-select-option value="For Pickup">For Pickup</ion-select-option>
+  <ion-select-option value="Completed">Completed</ion-select-option>
+  <ion-select-option value="Rejected">Rejected</ion-select-option>
+  <ion-select-option value="Returned">Returned</ion-select-option>
+  <ion-select-option value="Expired">Expired</ion-select-option> <!-- ✅ added -->
+</ion-select>
+
+
+        <ion-searchbar [(ngModel)]="searchText" placeholder="Search by name or contact"></ion-searchbar>
+
+        <div class="datetime">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <span>{{ currentDate }}</span>
+          <span>{{ currentTime }}</span>
+        </div>
+      </div>
+
+      <!-- Requests Table -->
+      <table class="requests-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Document</th>
+            <th>Purpose</th>
+            <th>Copies</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of filteredRequests()" [class.active]="req.id === selectedRequest?.id">
+            <td><img [src]="convertPhoto(req.user?.photo)" alt="User Photo" class="user-photo"></td>
+            <td>{{ req.user?.firstName }} {{ req.user?.middleName || '' }} {{ req.user?.lastName }}</td>
+            <td>{{ req.documentType }}</td>
+            <td>{{ req.purpose }}</td>
+            <td>{{ req.copies }}</td>
+            <td>{{ req.contact }}</td>
+            <td>
+              <ion-badge [color]="getStatusColor(req.status || 'Pending')">
+                {{ req.status || 'Pending' }}
+              </ion-badge>
+            </td>
+            <td>{{ req.notes || '-' }}</td>
+            <td>
+              <!-- Review if pending -->
+              <ion-button size="small" color="success" *ngIf="req.status === 'Pending'" (click)="viewRequestModal(req)">
+                Review
+              </ion-button>
+
+              <!-- Next Action if approved or in-progress -->
+              <ion-button size="small" color="primary"
+                *ngIf="req.status === 'Approved' || req.status === 'For Print' || req.status === 'For Pickup'"
+                (click)="nextAction(req)">
+                {{ req.status === 'Approved' ? 'For Print' : req.status === 'For Print' ? 'For Pickup' : 'Mark as Released' }}
+              </ion-button>
+
+              <!-- Resubmit option if returned -->
+              <ion-button size="small" color="warning" *ngIf="req.status === 'Returned'" (click)="resubmitRequest(req)">
+                Resubmit
+              </ion-button>
+
+              <!-- View only if completed/rejected -->
+              <ion-button size="small" color="medium"
+                *ngIf="req.status === 'Completed' || req.status === 'Rejected'"
+                (click)="viewRequestModal(req)">
+                View Details
+              </ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination Controls -->
+      <div class="pagination ion-padding">
+        <ion-button size="small" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+          Previous
+        </ion-button>
+
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+        <ion-button size="small" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+          Next
+        </ion-button>
+
+        <ion-item>
+          <ion-label>Rows per page</ion-label>
+          <ion-select [(ngModel)]="pageSize">
+            <ion-select-option [value]="5">5</ion-select-option>
+            <ion-select-option [value]="10">10</ion-select-option>
+            <ion-select-option [value]="20">20</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+    </main>
+  </div>
+
+  <!-- Update Modal -->
+  <ion-modal [isOpen]="showUpdateModal" (didDismiss)="cancelUpdate()">
+    <ion-content class="ion-padding">
+      <h2>Request Update</h2>
+      <p>Please select or type the reason why this request is incomplete:</p>
+
+      <ion-item>
+  <ion-checkbox slot="start" [(ngModel)]="updateReasons.missingID"></ion-checkbox>
+  <ion-label>Missing valid ID</ion-label>
+</ion-item>
+
+<ion-item>
+  <ion-label position="floating">Other Reason</ion-label>
+  <ion-input [(ngModel)]="updateReasons.other"></ion-input>
+</ion-item>
+
+      <div class="modal-actions ion-margin-top">
+        <ion-button color="primary" (click)="confirmUpdate()">Send Update Request</ion-button>
+        <ion-button (click)="cancelUpdate()">Cancel</ion-button>
+      </div>
+    </ion-content>
+  </ion-modal>
+
+  <!-- Rejection Modal -->
+  <ion-modal [isOpen]="showRejectModal" (didDismiss)="cancelReject()">
+    <ion-content class="ion-padding">
+      <h2>Reject Request</h2>
+      <p>Select or type the reason for rejection:</p>
+
+      <ion-list>
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="rejectionReasons.noID"></ion-checkbox>
+          <ion-label>No valid ID uploaded</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="rejectionReasons.blurryPhoto"></ion-checkbox>
+          <ion-label>Blurry photo</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="rejectionReasons.wrongZone"></ion-checkbox>
+          <ion-label>Wrong address / zone</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="rejectionReasons.duplicate"></ion-checkbox>
+          <ion-label>Duplicate request</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="rejectionReasons.notFound"></ion-checkbox>
+          <ion-label>Not found in verified list</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Other</ion-label>
+          <ion-input [(ngModel)]="rejectionReasons.other"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <div class="modal-actions ion-margin-top">
+        <ion-button color="danger" (click)="confirmReject()">Reject & Notify</ion-button>
+        <ion-button (click)="cancelReject()">Cancel</ion-button>
+      </div>
+    </ion-content>
+  </ion-modal>
+</ion-content>

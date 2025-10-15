@@ -1,0 +1,101 @@
+<!-- Drawer Menu -->
+<ion-menu contentId="main-content" type="overlay">
+  <ion-content class="menu-content">
+
+    <!-- Profile Section -->
+    <div class="profile-container">
+      <ion-avatar class="profile-pic">
+        <img [src]="user?.photo || 'assets/default-avatar.png'" alt="Profile Picture" />
+      </ion-avatar>
+      <div class="user-name" (click)="editProfile()">
+        {{ user?.firstName || 'Your Name' }}
+        <ion-icon name="pencil-outline" class="edit-icon"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <ion-list lines="none">
+      <ion-item button (click)="goToRequestDocument()">
+        <ion-icon slot="start" name="document-outline"></ion-icon>
+        <ion-label>Request Document</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="goToRequestLog()">
+        <ion-icon slot="start" name="list-outline"></ion-icon>
+        <ion-label>Request Log</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="goToReleasedDocuments()">
+        <ion-icon slot="start" name="hourglass-outline"></ion-icon>
+        <ion-label>Released Documents</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="logout()">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        <ion-label>Log out</ion-label>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-menu>
+
+<!-- Main Content -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Resident Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="goToNotifications()" aria-label="Notifications">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <!-- 🔴 Notification Badge -->
+        <ion-badge *ngIf="unreadCount > 0" color="danger" class="notif-badge">{{ unreadCount }}</ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main-content" class="dashboard-content" [fullscreen]="true">
+
+  <!-- Date and Time -->
+  <div class="date-box">
+    <div class="date-top">
+      <span class="day">{{ currentDay }}</span>
+      <span class="time">{{ currentTime }}</span>
+    </div>
+    <div class="full-date">{{ currentDate }}</div>
+  </div>
+
+  <!-- Documents Table -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Processing of Documents and Lead Times</ion-card-title>
+      <ion-card-subtitle>(Under Normal Circumstances)</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-grid>
+      <ion-row class="table-header">
+        <ion-col size="4"><strong>Documents</strong></ion-col>
+        <ion-col size="3"><strong>Lead Times</strong></ion-col>
+        <ion-col size="3"><strong>Requirements</strong></ion-col>
+        <ion-col size="2"><strong>Fees</strong></ion-col>
+      </ion-row>
+
+      <ion-row class="table-row" *ngFor="let doc of documents">
+        <ion-col size="4">{{ doc.name }}</ion-col>
+        <ion-col size="3">{{ doc.leadTime }}</ion-col>
+        <ion-col size="3">{{ doc.requirements }}</ion-col>
+        <ion-col size="2">{{ doc.fee }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- Notes -->
+  <p class="note">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <strong>NOTES:</strong> Unclaimed Barangay Indigency are cancelled after 6 months. 
+    Fees are updated as of Year 2025 and may change without prior notice.
+  </p>
+
+</ion-content>

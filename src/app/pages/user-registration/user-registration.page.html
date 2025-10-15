@@ -1,0 +1,132 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>User Registration</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-registration-content">
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <div class="custom-sidebar">
+      <ul>
+        <li (click)="navigateTo('secretary-dashboard')">
+          <ion-icon name="home-outline"></ion-icon>
+          <span class="label">Dashboard</span>
+        </li>
+        <li (click)="navigateTo('user-registration')" class="active">
+          <ion-icon name="person-add-outline"></ion-icon>
+          <span class="label">User Registration</span>
+        </li>
+        <li (click)="navigateTo('user-request')">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span class="label">User Requests</span>
+        </li>
+        <li (click)="navigateTo('template-page')">
+          <ion-icon name="document-outline"></ion-icon>
+          <span class="label">Template</span>
+        </li>
+      </ul>
+
+      <ul class="logout-section">
+        <li (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span class="label">Logout</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="top-bar">
+        <select [(ngModel)]="selectedStatus">
+          <option value="All">Status: All</option>
+          <option value="Pending">Pending</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+        <input type="text" placeholder="Search by name" [(ngModel)]="searchText">
+        <div class="datetime">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <span>{{ currentDate }}</span>
+          <span>{{ currentTime }}</span>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Full Name</th>
+            <th>Contact</th>
+            <th>Gender</th>
+            <th>Barangay</th>
+            <th>City</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers()" [class.active]="user.id === selectedId">
+            <td>
+              <img *ngIf="user.photo" [src]="'data:image/png;base64,' + user.photo" alt="User Photo" width="50" height="50">
+              <span *ngIf="!user.photo">No Photo</span>
+            </td>
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.contact }}</td>
+            <td>{{ user.gender }}</td>
+            <td>{{ user.barangay }}</td>
+            <td>{{ user.city }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <span [class]="user.status.toLowerCase() || 'pending'">
+                {{ user.status || 'Pending' }}
+              </span>
+            </td>
+            <td>
+              <ion-button *ngIf="user.status !== 'Rejected'" (click)="openRejectModal(user.id)" color="danger">
+                Reject
+              </ion-button>
+              <ion-button *ngIf="user.status === 'Rejected'" (click)="reReview(user.id)" color="primary">
+                Re-Review
+              </ion-button>
+              <ion-button *ngIf="user.status !== 'Approved'" (click)="approveUser(user.id)" color="success">
+                Approve
+              </ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Rejection Modal -->
+  <ion-modal [isOpen]="showRejectModal" (ionModalDidDismiss)="cancelReject()">
+  <ng-template>
+    <div class="modal-content">
+      <h2>Are you sure you want to reject this registration?</h2>
+      <p>Please select or type a reason for rejection:</p>
+
+      <ion-checkbox [(ngModel)]="rejectionReasons.noID">No valid ID uploaded</ion-checkbox>
+      <ion-checkbox [(ngModel)]="rejectionReasons.blurryPhoto">Blurry or unclear profile photo</ion-checkbox>
+      <ion-checkbox [(ngModel)]="rejectionReasons.wrongZone">Wrong address / zone</ion-checkbox>
+      <ion-checkbox [(ngModel)]="rejectionReasons.duplicate">Duplicate account</ion-checkbox>
+      <ion-checkbox [(ngModel)]="rejectionReasons.notFound">Not found in verified purok list</ion-checkbox>
+
+      <ion-item>
+        <ion-label>Other:</ion-label>
+        <ion-input [(ngModel)]="rejectionReasons.other"></ion-input>
+      </ion-item>
+
+      <div class="modal-actions">
+        <ion-button color="danger" (click)="confirmReject()">Reject & Notify</ion-button>
+        <ion-button (click)="cancelReject()">Cancel</ion-button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+</ion-content>

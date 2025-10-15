@@ -1,0 +1,229 @@
+.login-content {
+  --background: #f0f4f8;
+  position: relative;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+  box-sizing: border-box;
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 24px 0 12px;
+  }
+
+  a {
+    color: #3b82f6;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/assets/bglogin.jpg') no-repeat center center / cover;
+  filter: blur(6px);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.login-wrapper {
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 5vh;
+  padding: 1rem;
+}
+
+.login-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.6s ease-in-out;
+  position: relative;
+}
+
+.login-container.adjusted {
+  padding: 2.5rem 2rem;
+  max-width: 400px;
+}
+
+.logo-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1e3a8a;
+  margin-bottom: 4px;
+}
+
+.subtext {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #444;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  margin-bottom: 1.5rem;
+}
+
+.phone-container {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 12px;
+
+  .phone-box {
+    --background: #fff;
+    --border-radius: 8px;
+    --border-color: #3e5b94;
+    border: 1px solid #3e5b94;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+
+  .prefix-box {
+    flex: 0 0 80px;
+    justify-content: center;
+  }
+
+  .input-box {
+    flex: 1;
+  }
+
+  .prefix-label {
+    font-size: 16px;
+  }
+
+  ion-input {
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+ion-item.custom-input {
+  --background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  height: 55px;
+  font-size: 1rem;
+  box-shadow: 0 0 0 1px #ccc;
+  transition: box-shadow 0.2s ease-in-out;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.input-focused {
+  box-shadow: 0 0 0 2px #3b82f6 !important;
+}
+
+.input-focused ion-label {
+  color: #3b82f6 !important;
+  font-weight: 600;
+}
+
+.center-input ion-input,
+.center-text {
+  text-align: center;
+}
+
+.checkbox-forgot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 12px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-checkbox {
+  --checkbox-background-checked: #3e5b94;
+  --border-color-checked: #3e5b94;
+}
+
+.login-button,
+.login-btn {
+  --background: linear-gradient(to right, #3b82f6, #2563eb);
+  --border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  height: 44px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.bottom-text {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.create-link {
+  color: #1e66c8;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

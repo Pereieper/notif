@@ -1,0 +1,118 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Released Documents</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Search and Show Entries -->
+  <div class="table-controls">
+    <label>
+      Show 
+      <select [(ngModel)]="itemsPerPage" (change)="paginateDocuments()">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+      </select>
+      entries
+    </label>
+
+    <input type="text" [(ngModel)]="searchTerm" (input)="filterDocuments()" placeholder="Search...">
+  </div>
+
+  <!-- Table Header -->
+  <ion-grid>
+    <ion-row class="table-header">
+      <ion-col size="1">#</ion-col>
+      <ion-col size="4">Document</ion-col>
+      <ion-col size="3">Date Approved</ion-col>
+      <ion-col size="2">Status</ion-col>
+      <ion-col size="2">Action</ion-col>
+    </ion-row>
+
+    <!-- Table Rows -->
+    <ion-row *ngFor="let doc of paginatedDocuments; let i = index">
+      <ion-col size="1">{{ i + 1 + (currentPage - 1) * itemsPerPage }}</ion-col>
+      <ion-col size="4">{{ doc.documentType }}</ion-col>
+      <ion-col size="3">{{ doc.timestamp | date:'shortDate' }}</ion-col>
+      <ion-col size="2">
+        <ion-text color="primary">{{ doc.status }}</ion-text>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button size="small" color="medium" (click)="openInstructions(doc)">
+          View Instructions
+        </ion-button>
+
+        <ion-button *ngIf="doc.status === 'For Pickup'" size="small" color="success" (click)="markAsReleased(doc)">
+          Release
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Pagination Controls -->
+  <ion-row class="pagination-controls" *ngIf="totalPages > 1">
+    <ion-button size="small" (click)="prevPage()" [disabled]="currentPage === 1">Prev</ion-button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <ion-button size="small" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</ion-button>
+  </ion-row>
+
+</ion-content>
+
+<!-- Instructions Modal -->
+<ion-modal *ngIf="showModal">
+  <ion-header>
+    <ion-toolbar color="light">
+      <ion-title>Instructions</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    <p><strong>Document:</strong> {{ selectedDocument?.documentType }}</p>
+    <p><strong>Date Approved:</strong> {{ selectedDocument?.timestamp | date:'longDate' }}</p>
+    <p><strong>Pickup Schedule:</strong> Monday to Friday, 8:00 AM - 5:00 PM</p>
+    <p><strong>Status:</strong> <ion-text color="primary">{{ selectedDocument?.status }}</ion-text></p>
+
+    <div *ngIf="selectedDocument?.status === 'For Pickup'">
+      <p><strong>Instruction for Claiming:</strong></p>
+      <ol>
+        <li>Bring 1 valid government-issued ID (e.g., UMID, PhilHealth, Student ID).</li>
+        <li>Bring the exact amount, if possible, for faster processing.</li>
+      </ol>
+
+      <p><strong>If you can’t pick up personally:</strong></p>
+      <ol>
+        <li>Provide an authorization letter.</li>
+        <li>Attach a photocopy of your valid ID and your representative’s ID.</li>
+      </ol>
+
+      <ion-text color="warning">
+        <p>⚠️ Failure to claim within 6 months will result in cancellation.</p>
+      </ion-text>
+
+      <ion-button expand="block" color="success" (click)="markAsReleased(selectedDocument)">
+        Mark as Released
+      </ion-button>
+    </div>
+
+    <div *ngIf="selectedDocument?.status !== 'For Pickup'">
+      <ion-text color="success">
+        <p>This document has already been released.</p>
+      </ion-text>
+    </div>
+  </ion-content>
+</ion-modal>
